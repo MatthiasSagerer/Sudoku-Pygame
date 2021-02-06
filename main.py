@@ -1,5 +1,7 @@
 import pygame
 
+import sudokus
+
 playing = True
 
 while playing:
@@ -10,6 +12,3 @@ while playing:
     while difficulty != 0:
         pass
         # TODO: main solving screen with 9 x 9 grid, time, pause & play, digits 1 to 9 as inputs, undo & redo, hint and show solution button.
-
-
-
