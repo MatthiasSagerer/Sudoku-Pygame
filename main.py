@@ -44,15 +44,16 @@ def drawMenu(surface, dark_info, t_easy, t_medium, t_hard, t_expert):
     easy_r = displayText(surface, dark_info, 'Easy', cell_size, cell_size * 3, font_size_default)
     medium_r = displayText(surface, dark_info, 'Medium', cell_size, cell_size * 5, font_size_default)
     hard_r = displayText(surface, dark_info, 'Hard', cell_size, cell_size * 7, font_size_default)
-    expert_r = displayText(surface, dark_info, 'Expert', cell_size, cell_size * 9, font_size_default)
+    expert_r = displayText(surface, dark_info, 'Very Hard', cell_size, cell_size * 9, font_size_default)
     displayText(surface, dark_info, 'Record', cell_size * 5, cell_size, font_size_big)
     displayText(surface, dark_info, str(t_easy), cell_size * 5, cell_size * 3, font_size_default)
     displayText(surface, dark_info, str(t_medium), cell_size * 5, cell_size * 5, font_size_default)
     displayText(surface, dark_info, str(t_hard), cell_size * 5, cell_size * 7, font_size_default)
     displayText(surface, dark_info, str(t_expert), cell_size * 5, cell_size * 9, font_size_default)
-    displayText(surface, dark_info, 'Theme:', cell_size, cell_size * 11, font_size_small)
-    dark_info_rect = displayText(surface, dark_info, 'Dark', cell_size * 4, cell_size * 11, font_size_small)
-    bright_r = displayText(surface, dark_info, 'Bright', cell_size * 6, cell_size * 11, font_size_small)
+    displayText(surface, dark_info, 'Theme:', cell_size, cell_size * 10.5, font_size_small)
+    dark_info_rect = displayText(surface, dark_info, 'Dark', cell_size * 4, cell_size * 10.5, font_size_small)
+    bright_r = displayText(surface, dark_info, 'Bright', cell_size * 6, cell_size * 10.5, font_size_small)
+    displayText(surface, dark_info, '© Memory-Improvement-Tips.com. Used by Permission.', cell_size, cell_size * 11.5, font_size_very_small)
     return easy_r, medium_r, hard_r, expert_r, dark_info_rect, bright_r
 
 
@@ -61,6 +62,7 @@ if __name__ == '__main__':
     playing = True
     FPS = 60
     cell_size = 60
+    font_size_very_small = 18
     font_size_small = 27
     font_size_default = 35
     font_size_big = 43
