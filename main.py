@@ -5,16 +5,17 @@ import sys
 import datetime
 
 blank_sudoku = [
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
+
 
 def drawGrid(surface, dark_info):
     if dark_info:
@@ -44,7 +45,7 @@ def displayText(surface, dark_info, txt, x, y, size, start=True):
         if start:
             col = (0, 0, 0)
         else:
-            col = (55,55,55)
+            col = (55, 55, 55)
     comic_sans = pygame.font.SysFont('calibri', size)
     txt_surface = comic_sans.render(txt, False, col)
     txt_rect = txt_surface.get_rect(topleft=(x, y))
@@ -78,7 +79,8 @@ def displaySudoku(surface, dark_info, sudoku, start):
     for i in range(9):
         for j in range(9):
             if sudoku[i][j] != 0:
-                displayText(surface, dark_info, str(sudoku[i][j]), cell_size * (j+0.32), cell_size * (i+0.17), font_size_big, start=start)
+                displayText(surface, dark_info, str(sudoku[i][j]), cell_size * (j + 0.32), cell_size * (i + 0.17),
+                            font_size_big, start=start)
             else:
                 continue
 
@@ -117,16 +119,12 @@ if __name__ == '__main__':
                 mouse_pos = event.pos
                 if easy_rect.collidepoint(mouse_pos):
                     difficulty = 1
-                    print(1)
                 if medium_rect.collidepoint(mouse_pos):
                     difficulty = 2
-                    print(2)
                 if hard_rect.collidepoint(mouse_pos):
                     difficulty = 3
-                    print(3)
                 if expert_rect.collidepoint(mouse_pos):
                     difficulty = 4
-                    print(4)
                 if dark_rect.collidepoint(mouse_pos):
                     dark = True
                     if dark:
@@ -157,9 +155,12 @@ if __name__ == '__main__':
                 sys.exit()
         pygame.display.update()
         clock.tick(FPS)
+        first = True
+        current_sudoku = blank_sudoku.copy()
+        current_sudoku_start = blank_sudoku.copy()
+        current_solution = blank_sudoku.copy()
         if difficulty != 0:
             win.fill(color=bg_col)
-            first = True
         while difficulty != 0:
             if first:
                 sudokus_list = data.sudokus[difficulty]
