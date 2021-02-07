@@ -1,5 +1,6 @@
 import sudokus
 import solutions
+
 sudokus = {
     'easy': [sudokus.EASY1, sudokus.EASY2, sudokus.EASY3, sudokus.EASY4, sudokus.EASY5,
              sudokus.EASY6, sudokus. EASY7],
