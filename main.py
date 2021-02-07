@@ -149,5 +149,5 @@ if __name__ == '__main__':
                             bg_col = 'white'
                         win.fill(color=bg_col)
                         difficulty = 0
-            # TODO: main solving screen with 9 x 9 grid, time, pause & play,
+            # TODO: main solving screen with 9 x 9 grid, time, pause & play, verification-switch
             #  digits 1 to 9 as inputs, undo & redo, hint and show solution button.
