@@ -1,8 +1,20 @@
 import pygame
+import random
 import data
 import sys
 import datetime
 
+blank_sudoku = [
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0]
+]
 
 def drawGrid(surface, dark_info):
     if dark_info:
@@ -22,14 +34,17 @@ def drawGrid(surface, dark_info):
         w = 1
 
 
-pygame.font.init()
-
-
-def displayText(surface, dark_info, txt, x, y, size):
+def displayText(surface, dark_info, txt, x, y, size, start=True):
     if dark_info:
-        col = (255, 255, 255)
+        if start:
+            col = (255, 255, 255)
+        else:
+            col = (200, 200, 200)
     else:
-        col = (0, 0, 0)
+        if start:
+            col = (0, 0, 0)
+        else:
+            col = (55,55,55)
     comic_sans = pygame.font.SysFont('calibri', size)
     txt_surface = comic_sans.render(txt, False, col)
     txt_rect = txt_surface.get_rect(topleft=(x, y))
@@ -40,12 +55,12 @@ def displayText(surface, dark_info, txt, x, y, size):
 
 
 def drawMenu(surface, dark_info, t_easy, t_medium, t_hard, t_expert):
-    displayText(surface, dark_info, 'Difficulty', cell_size, cell_size*0.2, font_size_big)
+    displayText(surface, dark_info, 'Difficulty', cell_size, cell_size * 0.2, font_size_big)
     easy_r = displayText(surface, dark_info, 'Easy', cell_size, cell_size * 2, font_size_default)
     medium_r = displayText(surface, dark_info, 'Medium', cell_size, cell_size * 4, font_size_default)
     hard_r = displayText(surface, dark_info, 'Hard', cell_size, cell_size * 6, font_size_default)
     expert_r = displayText(surface, dark_info, 'Very Hard', cell_size, cell_size * 8, font_size_default)
-    displayText(surface, dark_info, 'Record', cell_size * 5, cell_size*0.2, font_size_big)
+    displayText(surface, dark_info, 'Record', cell_size * 5, cell_size * 0.2, font_size_big)
     displayText(surface, dark_info, str(t_easy), cell_size * 5, cell_size * 2, font_size_default)
     displayText(surface, dark_info, str(t_medium), cell_size * 5, cell_size * 4, font_size_default)
     displayText(surface, dark_info, str(t_hard), cell_size * 5, cell_size * 6, font_size_default)
@@ -54,9 +69,21 @@ def drawMenu(surface, dark_info, t_easy, t_medium, t_hard, t_expert):
     dark_info_rect = displayText(surface, dark_info, 'Dark', cell_size * 4, cell_size * 9.5, font_size_small)
     bright_r = displayText(surface, dark_info, 'Bright', cell_size * 6, cell_size * 9.5, font_size_small)
     displayText(surface, dark_info, 'For the Sudokus:', cell_size, cell_size * 11, font_size_very_small)
-    displayText(surface, dark_info, '© Memory-Improvement-Tips.com. Used by Permission.', cell_size, cell_size * 11.5, font_size_very_small)
+    displayText(surface, dark_info, '© Memory-Improvement-Tips.com. Used by Permission.', cell_size, cell_size * 11.5,
+                font_size_very_small)
     return easy_r, medium_r, hard_r, expert_r, dark_info_rect, bright_r
 
+
+def displaySudoku(surface, dark_info, sudoku, start):
+    for i in range(9):
+        for j in range(9):
+            if sudoku[i][j] != 0:
+                displayText(surface, dark_info, str(sudoku[i][j]), cell_size * (j+0.32), cell_size * (i+0.17), font_size_big, start=start)
+            else:
+                continue
+
+
+pygame.font.init()
 
 if __name__ == '__main__':
     dark = False
@@ -66,7 +93,7 @@ if __name__ == '__main__':
     font_size_very_small = 18
     font_size_small = 27
     font_size_default = 35
-    font_size_big = 43
+    font_size_big = 45
     clock = pygame.time.Clock()
     win = pygame.display.set_mode((cell_size * 9, cell_size * 12))
     pygame.display.set_caption('Sudoku')
@@ -132,8 +159,18 @@ if __name__ == '__main__':
         clock.tick(FPS)
         if difficulty != 0:
             win.fill(color=bg_col)
+            first = True
         while difficulty != 0:
-            drawGrid(win, dark)
+            if first:
+                sudokus_list = data.sudokus[difficulty]
+                solutions_list = data.solutions[difficulty]
+                rand_num = random.randint(0, len(sudokus_list) - 1)
+                current_sudoku_start = sudokus_list[rand_num].copy()
+                current_sudoku = blank_sudoku.copy()
+                current_solution = solutions_list[rand_num].copy()
+                drawGrid(win, dark)
+            displaySudoku(win, dark, current_sudoku_start, True)
+            displaySudoku(win, dark, current_sudoku, False)
             menu_rect = displayText(win, dark, 'Menu', cell_size, cell_size * 11, font_size_small)
             pygame.display.update()
             for event in pygame.event.get():
@@ -150,5 +187,6 @@ if __name__ == '__main__':
                             bg_col = 'white'
                         win.fill(color=bg_col)
                         difficulty = 0
+            first = False
             # TODO: main solving screen with 9 x 9 grid, time, pause & play, verification-switch
             #  digits 1 to 9 as inputs, undo & redo, hint and show solution button.
