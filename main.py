@@ -85,51 +85,80 @@ def displaySudoku(surface, dark_info, sudoku, start):
                 continue
 
 
-def markCells(surface, number, sudoku, sudoku_start):
-    if number != 0:
-        for i in range(9):
-            for j in range(9):
-                if sudoku[i][j] == number or sudoku_start[i][j] == number:
-                    x = cell_size * j + 1
-                    y = cell_size * i + 1
-                    width = cell_size - 1
-                    height = cell_size - 1
-                    if j % 3 == 0:
-                        x += 1
-                        width -= 1
-                    if j % 3 == 2:
-                        width -= 1
-                    if i % 3 == 0:
-                        y += 1
-                        height -= 1
-                    if i % 3 == 2:
-                        height -= 1
-                    pygame.draw.rect(surface, (166, 255, 184), (x, y, width, height))
+def markCells(surface, number, sudoku, sudoku_start, empt, x_p, y_p, col=(166, 255, 184)):
+    if not empt:
+        if number != 0:
+            for i in range(9):
+                for j in range(9):
+                    if sudoku[i][j] == number or sudoku_start[i][j] == number:
+                        x = cell_size * j + 1
+                        y = cell_size * i + 1
+                        width = cell_size - 1
+                        height = cell_size - 1
+                        if j % 3 == 0:
+                            x += 1
+                            width -= 1
+                        if j % 3 == 2:
+                            width -= 1
+                        if i % 3 == 0:
+                            y += 1
+                            height -= 1
+                        if i % 3 == 2:
+                            height -= 1
+                        pygame.draw.rect(surface, col, (x, y, width, height))
+    else:
+        i = y_p // cell_size
+        j = x_p // cell_size
+        x_p = j*cell_size + 1
+        y_p = i*cell_size + 1
+        width = cell_size - 1
+        height = cell_size - 1
+        if j % 3 == 0:
+            x_p += 1
+            width -= 1
+        if j % 3 == 2:
+            width -= 1
+        if i % 3 == 0:
+            y_p += 1
+            height -= 1
+        if i % 3 == 2:
+            height -= 1
+        pygame.draw.rect(surface, col, (x_p, y_p, width, height))
 
 
 pygame.font.init()
 
 
-def markCellsLogic(x_p, y_p):
+def markCellsLogic(x_p, y_p, empt):
     global saved_num, marked_num
+    if empty:
+        if dark:
+            col = (40, 40, 40)
+        else:
+            col = (230, 230, 230)
+    else:
+        if dark:
+            col = (0, 108, 36)
+        else:
+            col = (166, 255, 184)
     if 0 <= x_p <= cell_size * 9 and 0 <= y_p <= cell_size * 9:
-        if current_sudoku[y_pos // cell_size][x_pos // cell_size] != 0:
+        if (current_sudoku[y_pos // cell_size][x_pos // cell_size] != 0) or empt:
             win.fill(color=bg_col)
             drawGrid(win, dark)
             marked_num = current_sudoku[y_pos // cell_size][x_pos // cell_size]
-            if marked_num != 0 and marked_num != saved_num:
-                markCells(win, marked_num, current_sudoku, current_sudoku_start)
-                markCells(win, marked_num, current_sudoku, current_sudoku_start)
+            if (marked_num != 0 and marked_num != saved_num) or empt:
+                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, col=col)
+                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, col=col)
                 saved_num = current_sudoku[y_pos // cell_size][x_pos // cell_size]
             displaySudoku(win, dark, current_sudoku_start, True)
             displaySudoku(win, dark, current_sudoku, False)
-        elif current_sudoku_start[y_pos // cell_size][x_pos // cell_size] != 0:
+        elif (current_sudoku_start[y_pos // cell_size][x_pos // cell_size] != 0) or empt:
             win.fill(color=bg_col)
             drawGrid(win, dark)
-            marked_num = current_sudoku_start[y_pos // cell_size][x_pos // cell_size]
-            if marked_num != 0 and marked_num != saved_num:
-                markCells(win, marked_num, current_sudoku, current_sudoku_start)
-                markCells(win, marked_num, current_sudoku, current_sudoku_start)
+            marked_num = current_sudoku_start[y_p // cell_size][x_p // cell_size]
+            if (marked_num != 0 and marked_num != saved_num) or empt:
+                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, col=col)
+                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, col=col)
                 saved_num = current_sudoku_start[y_pos // cell_size][x_pos // cell_size]
             else:
                 saved_num = 0
@@ -222,7 +251,6 @@ if __name__ == '__main__':
                 current_sudoku = blank_sudoku.copy()
                 current_solution = solutions_list[rand_num].copy()
                 drawGrid(win, dark)
-                markCells(win, marked_num, current_sudoku, current_sudoku_start)
                 displaySudoku(win, dark, current_sudoku_start, True)
                 displaySudoku(win, dark, current_sudoku, False)
             menu_rect = displayText(win, dark, 'Menu', cell_size, cell_size * 11, font_size_small)
@@ -243,7 +271,12 @@ if __name__ == '__main__':
                         difficulty = 0
                     x_pos = mouse_pos[0]
                     y_pos = mouse_pos[1]
-                    markCellsLogic(x_pos, y_pos)
+                    if 0 <= x_pos <= cell_size * 9 and 0 <= y_pos <= cell_size * 9:
+                        if current_sudoku_start[y_pos // cell_size][x_pos // cell_size] == 0:
+                            empty = True
+                        else:
+                            empty = False
+                        markCellsLogic(x_pos, y_pos, empty)
             first = False
             # TODO: main solving screen with 9 x 9 grid, time, pause & play, verification-switch
             #  digits 1 to 9 as inputs, undo & redo, hint and show solution button.
