@@ -66,9 +66,9 @@ def drawMenu(surface, dark_info, t_easy, t_medium, t_hard, t_expert):
     displayText(surface, dark_info, str(t_medium), cell_size * 5, cell_size * 4, font_size_default)
     displayText(surface, dark_info, str(t_hard), cell_size * 5, cell_size * 6, font_size_default)
     displayText(surface, dark_info, str(t_expert), cell_size * 5, cell_size * 8, font_size_default)
-    displayText(surface, dark_info, 'Theme:', cell_size, cell_size * 9.5, font_size_small)
-    dark_info_rect = displayText(surface, dark_info, 'Dark', cell_size * 4, cell_size * 9.5, font_size_small)
-    bright_r = displayText(surface, dark_info, 'Bright', cell_size * 6, cell_size * 9.5, font_size_small)
+    displayText(surface, dark_info, 'Theme:', cell_size, cell_size * 9.75, font_size_small)
+    dark_info_rect = displayText(surface, dark_info, 'Dark', cell_size * 4, cell_size * 9.75, font_size_small)
+    bright_r = displayText(surface, dark_info, 'Bright', cell_size * 6, cell_size * 9.75, font_size_small)
     displayText(surface, dark_info, 'For the Sudokus:', cell_size, cell_size * 11, font_size_very_small)
     displayText(surface, dark_info, '© Memory-Improvement-Tips.com. Used by Permission.', cell_size, cell_size * 11.5,
                 font_size_very_small)
@@ -85,12 +85,62 @@ def displaySudoku(surface, dark_info, sudoku, start):
                 continue
 
 
+def markCells(surface, number, sudoku, sudoku_start):
+    if number != 0:
+        for i in range(9):
+            for j in range(9):
+                if sudoku[i][j] == number or sudoku_start[i][j] == number:
+                    x = cell_size * j + 1
+                    y = cell_size * i + 1
+                    width = cell_size - 1
+                    height = cell_size - 1
+                    if j % 3 == 0:
+                        x += 1
+                        width -= 1
+                    if j % 3 == 2:
+                        width -= 1
+                    if i % 3 == 0:
+                        y += 1
+                        height -= 1
+                    if i % 3 == 2:
+                        height -= 1
+                    pygame.draw.rect(surface, (166, 255, 184), (x, y, width, height))
+
+
 pygame.font.init()
+
+
+def markCellsLogic(x_p, y_p):
+    global saved_num, marked_num
+    if 0 <= x_p <= cell_size * 9 and 0 <= y_p <= cell_size * 9:
+        if current_sudoku[y_pos // cell_size][x_pos // cell_size] != 0:
+            win.fill(color=bg_col)
+            drawGrid(win, dark)
+            marked_num = current_sudoku[y_pos // cell_size][x_pos // cell_size]
+            if marked_num != 0 and marked_num != saved_num:
+                markCells(win, marked_num, current_sudoku, current_sudoku_start)
+                markCells(win, marked_num, current_sudoku, current_sudoku_start)
+                saved_num = current_sudoku[y_pos // cell_size][x_pos // cell_size]
+            displaySudoku(win, dark, current_sudoku_start, True)
+            displaySudoku(win, dark, current_sudoku, False)
+        elif current_sudoku_start[y_pos // cell_size][x_pos // cell_size] != 0:
+            win.fill(color=bg_col)
+            drawGrid(win, dark)
+            marked_num = current_sudoku_start[y_pos // cell_size][x_pos // cell_size]
+            if marked_num != 0 and marked_num != saved_num:
+                markCells(win, marked_num, current_sudoku, current_sudoku_start)
+                markCells(win, marked_num, current_sudoku, current_sudoku_start)
+                saved_num = current_sudoku_start[y_pos // cell_size][x_pos // cell_size]
+            else:
+                saved_num = 0
+            displaySudoku(win, dark, current_sudoku_start, True)
+            displaySudoku(win, dark, current_sudoku, False)
+
 
 if __name__ == '__main__':
     dark = False
     playing = True
-    FPS = 60
+    FPS = 90
     cell_size = 55
     font_size_very_small = 18
     font_size_small = 27
@@ -159,6 +209,8 @@ if __name__ == '__main__':
         current_sudoku = blank_sudoku.copy()
         current_sudoku_start = blank_sudoku.copy()
         current_solution = blank_sudoku.copy()
+        marked_num = 0
+        saved_num = 0
         if difficulty != 0:
             win.fill(color=bg_col)
         while difficulty != 0:
@@ -170,8 +222,9 @@ if __name__ == '__main__':
                 current_sudoku = blank_sudoku.copy()
                 current_solution = solutions_list[rand_num].copy()
                 drawGrid(win, dark)
-            displaySudoku(win, dark, current_sudoku_start, True)
-            displaySudoku(win, dark, current_sudoku, False)
+                markCells(win, marked_num, current_sudoku, current_sudoku_start)
+                displaySudoku(win, dark, current_sudoku_start, True)
+                displaySudoku(win, dark, current_sudoku, False)
             menu_rect = displayText(win, dark, 'Menu', cell_size, cell_size * 11, font_size_small)
             pygame.display.update()
             for event in pygame.event.get():
@@ -188,6 +241,9 @@ if __name__ == '__main__':
                             bg_col = 'white'
                         win.fill(color=bg_col)
                         difficulty = 0
+                    x_pos = mouse_pos[0]
+                    y_pos = mouse_pos[1]
+                    markCellsLogic(x_pos, y_pos)
             first = False
             # TODO: main solving screen with 9 x 9 grid, time, pause & play, verification-switch
             #  digits 1 to 9 as inputs, undo & redo, hint and show solution button.
