@@ -42,12 +42,12 @@ def displayText(surface, dark_info, txt, x, y, size, start=True):
         if start:
             colo = (255, 255, 255)
         else:
-            colo = (200, 200, 200)
+            colo = (63, 192, 204)
     else:
         if start:
             colo = (0, 0, 0)
         else:
-            colo = (55, 55, 55)
+            colo = (63, 192, 204)
     comic_sans = pygame.font.SysFont('calibri', size)
     txt_surface = comic_sans.render(txt, False, colo)
     txt_rect = txt_surface.get_rect(topleft=(x, y))
@@ -126,6 +126,15 @@ def markCells(surface, number, sudoku, sudoku_start, empt, x_p, y_p, colo=(166, 
         if i % 3 == 2:
             height -= 1
         pygame.draw.rect(surface, colo, (x_p, y_p, width, height))
+
+
+def insertNum(surface, num, current_s, current_s_s, r, c, dark_info):
+    current_s[r][c] = num
+    moves.append((r, c, num))
+    surface.fill(color=bg_col)
+    drawGrid(surface, dark_info)
+    displaySudoku(win, dark_info, current_s_s, True)
+    displaySudoku(win, dark_info, current_s, False)
 
 
 pygame.font.init()
@@ -259,6 +268,9 @@ if __name__ == '__main__':
         start_time = time.time()
         dt = 0
         play = True
+        moves = []
+        marked_cell = (-1, -1)
+        empty = False
         if difficulty != 0:
             win.fill(color=bg_col)
         while difficulty != 0:
@@ -304,16 +316,39 @@ if __name__ == '__main__':
                             bg_col = 'black'
                         else:
                             bg_col = 'white'
-                        win.fill(color=bg_col)
                         difficulty = 0
+                        win.fill(color=bg_col)
+                        # TODO: fix the changing of blank_sudoku
                     x_pos = mouse_pos[0]
                     y_pos = mouse_pos[1]
                     if 0 <= x_pos <= cell_size * 9 and 0 <= y_pos <= cell_size * 9:
                         if current_sudoku_start[y_pos // cell_size][x_pos // cell_size] == 0:
                             empty = True
+                            marked_cell = (y_pos // cell_size, x_pos // cell_size)
                         else:
                             empty = False
                         markCellsLogic(x_pos, y_pos, empty)
+                    row = marked_cell[0]
+                    col = marked_cell[1]
+                    if empty and current_sudoku_start[row][col] == 0 and current_sudoku[row][col] == 0:
+                        if num1.collidepoint(mouse_pos):
+                            insertNum(win, 1, current_sudoku, current_sudoku_start, row, col, dark)
+                        if num2.collidepoint(mouse_pos):
+                            insertNum(win, 2, current_sudoku, current_sudoku_start, row, col, dark)
+                        if num3.collidepoint(mouse_pos):
+                            insertNum(win, 3, current_sudoku, current_sudoku_start, row, col, dark)
+                        if num4.collidepoint(mouse_pos):
+                            insertNum(win, 4, current_sudoku, current_sudoku_start, row, col, dark)
+                        if num5.collidepoint(mouse_pos):
+                            insertNum(win, 5, current_sudoku, current_sudoku_start, row, col, dark)
+                        if num6.collidepoint(mouse_pos):
+                            insertNum(win, 6, current_sudoku, current_sudoku_start, row, col, dark)
+                        if num7.collidepoint(mouse_pos):
+                            insertNum(win, 7, current_sudoku, current_sudoku_start, row, col, dark)
+                        if num8.collidepoint(mouse_pos):
+                            insertNum(win, 8, current_sudoku, current_sudoku_start, row, col, dark)
+                        if num9.collidepoint(mouse_pos):
+                            insertNum(win, 9, current_sudoku, current_sudoku_start, row, col, dark)
                     if play_pause_rect.collidepoint(mouse_pos):
                         if dark:
                             col = 'black'
@@ -333,5 +368,5 @@ if __name__ == '__main__':
                                 math.floor(cell_size * 7.5), math.floor(cell_size * 9.2), math.floor(cell_size * 2),
                                 math.floor(cell_size * 0.75)))
             first = False
-            # TODO: main solving screen with 9 x 9 grid, time, pause & play, verification-switch
-            #  digits 1 to 9 as inputs, undo & redo, hint and show solution button.
+            # TODO: fixing changing blank sudoku, white box when stop, undo & redo logic, hint & solution logic, ending
+            #  screen, updating record time (with text file)
