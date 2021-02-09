@@ -3,6 +3,8 @@ import random
 import data
 import sys
 import datetime
+import time
+import math
 
 blank_sudoku = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -19,17 +21,17 @@ blank_sudoku = [
 
 def drawGrid(surface, dark_info):
     if dark_info:
-        col = (255, 255, 255)
+        colo = (255, 255, 255)
     else:
-        col = (0, 0, 0)
+        colo = (0, 0, 0)
     x = 0
     y = 0
     w = 1
     for i in range(10):
         if i % 3 == 0:
             w = 3
-        pygame.draw.line(surface, col, (x, 0), (x, cell_size * 9), width=w)
-        pygame.draw.line(surface, col, (0, y), (cell_size * 9, y), width=w)
+        pygame.draw.line(surface, colo, (x, 0), (x, cell_size * 9), width=w)
+        pygame.draw.line(surface, colo, (0, y), (cell_size * 9, y), width=w)
         x += cell_size
         y += cell_size
         w = 1
@@ -38,16 +40,16 @@ def drawGrid(surface, dark_info):
 def displayText(surface, dark_info, txt, x, y, size, start=True):
     if dark_info:
         if start:
-            col = (255, 255, 255)
+            colo = (255, 255, 255)
         else:
-            col = (200, 200, 200)
+            colo = (200, 200, 200)
     else:
         if start:
-            col = (0, 0, 0)
+            colo = (0, 0, 0)
         else:
-            col = (55, 55, 55)
+            colo = (55, 55, 55)
     comic_sans = pygame.font.SysFont('calibri', size)
-    txt_surface = comic_sans.render(txt, False, col)
+    txt_surface = comic_sans.render(txt, False, colo)
     txt_rect = txt_surface.get_rect(topleft=(x, y))
     surface.blit(txt_surface, (x, y))
     surface.blit(txt_surface, txt_rect)
@@ -85,7 +87,7 @@ def displaySudoku(surface, dark_info, sudoku, start):
                 continue
 
 
-def markCells(surface, number, sudoku, sudoku_start, empt, x_p, y_p, col=(166, 255, 184)):
+def markCells(surface, number, sudoku, sudoku_start, empt, x_p, y_p, colo=(166, 255, 184)):
     if not empt:
         if number != 0:
             for i in range(9):
@@ -105,12 +107,12 @@ def markCells(surface, number, sudoku, sudoku_start, empt, x_p, y_p, col=(166, 2
                             height -= 1
                         if i % 3 == 2:
                             height -= 1
-                        pygame.draw.rect(surface, col, (x, y, width, height))
+                        pygame.draw.rect(surface, colo, (x, y, width, height))
     else:
         i = y_p // cell_size
         j = x_p // cell_size
-        x_p = j*cell_size + 1
-        y_p = i*cell_size + 1
+        x_p = j * cell_size + 1
+        y_p = i * cell_size + 1
         width = cell_size - 1
         height = cell_size - 1
         if j % 3 == 0:
@@ -123,7 +125,7 @@ def markCells(surface, number, sudoku, sudoku_start, empt, x_p, y_p, col=(166, 2
             height -= 1
         if i % 3 == 2:
             height -= 1
-        pygame.draw.rect(surface, col, (x_p, y_p, width, height))
+        pygame.draw.rect(surface, colo, (x_p, y_p, width, height))
 
 
 pygame.font.init()
@@ -133,22 +135,22 @@ def markCellsLogic(x_p, y_p, empt):
     global saved_num, marked_num
     if empty:
         if dark:
-            col = (40, 40, 40)
+            colo = (40, 40, 40)
         else:
-            col = (230, 230, 230)
+            colo = (230, 230, 230)
     else:
         if dark:
-            col = (0, 108, 36)
+            colo = (0, 108, 36)
         else:
-            col = (166, 255, 184)
+            colo = (166, 255, 184)
     if 0 <= x_p <= cell_size * 9 and 0 <= y_p <= cell_size * 9:
         if (current_sudoku[y_pos // cell_size][x_pos // cell_size] != 0) or empt:
             win.fill(color=bg_col)
             drawGrid(win, dark)
             marked_num = current_sudoku[y_pos // cell_size][x_pos // cell_size]
             if (marked_num != 0 and marked_num != saved_num) or empt:
-                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, col=col)
-                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, col=col)
+                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
+                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
                 saved_num = current_sudoku[y_pos // cell_size][x_pos // cell_size]
             displaySudoku(win, dark, current_sudoku_start, True)
             displaySudoku(win, dark, current_sudoku, False)
@@ -157,13 +159,26 @@ def markCellsLogic(x_p, y_p, empt):
             drawGrid(win, dark)
             marked_num = current_sudoku_start[y_p // cell_size][x_p // cell_size]
             if (marked_num != 0 and marked_num != saved_num) or empt:
-                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, col=col)
-                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, col=col)
+                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
+                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
                 saved_num = current_sudoku_start[y_pos // cell_size][x_pos // cell_size]
             else:
                 saved_num = 0
             displaySudoku(win, dark, current_sudoku_start, True)
             displaySudoku(win, dark, current_sudoku, False)
+
+
+def displayNumbers(surface):
+    n1_rect = displayText(surface, dark, '1', cell_size * 0.5, cell_size * 9.3, font_size_big)
+    n2_rect = displayText(surface, dark, '2', cell_size * 1.3, cell_size * 9.3, font_size_big)
+    n3_rect = displayText(surface, dark, '3', cell_size * 2.1, cell_size * 9.3, font_size_big)
+    n4_rect = displayText(surface, dark, '4', cell_size * 2.9, cell_size * 9.3, font_size_big)
+    n5_rect = displayText(surface, dark, '5', cell_size * 3.7, cell_size * 9.3, font_size_big)
+    n6_rect = displayText(surface, dark, '6', cell_size * 0.9, cell_size * 10.3, font_size_big)
+    n7_rect = displayText(surface, dark, '7', cell_size * 1.7, cell_size * 10.3, font_size_big)
+    n8_rect = displayText(surface, dark, '8', cell_size * 2.5, cell_size * 10.3, font_size_big)
+    n9_rect = displayText(surface, dark, '9', cell_size * 3.3, cell_size * 10.3, font_size_big)
+    return n1_rect, n2_rect, n3_rect, n4_rect, n5_rect, n6_rect, n7_rect, n8_rect, n9_rect
 
 
 if __name__ == '__main__':
@@ -240,6 +255,10 @@ if __name__ == '__main__':
         current_solution = blank_sudoku.copy()
         marked_num = 0
         saved_num = 0
+        play_pause = 'Pause'
+        start_time = time.time()
+        dt = 0
+        play = True
         if difficulty != 0:
             win.fill(color=bg_col)
         while difficulty != 0:
@@ -253,8 +272,26 @@ if __name__ == '__main__':
                 drawGrid(win, dark)
                 displaySudoku(win, dark, current_sudoku_start, True)
                 displaySudoku(win, dark, current_sudoku, False)
-            menu_rect = displayText(win, dark, 'Menu', cell_size, cell_size * 11, font_size_small)
+            num1, num2, num3, num4, num5, num6, num7, num8, num9 = displayNumbers(win)
+            displayText(win, dark, 'Time:', cell_size * 4.5, cell_size * 9.8, font_size_default)
+            if dark:
+                col = 'black'
+            else:
+                col = 'white'
+            pygame.draw.rect(win, col, (
+                math.floor(cell_size * 6.25), math.floor(cell_size * 9.8), math.floor(cell_size * 3), cell_size))
+            displayText(win, dark, time.strftime('%H:%M:%S', time.gmtime(dt)), cell_size * 6.25, cell_size * 9.8,
+                        font_size_default)
+            play_pause_rect = displayText(win, dark, play_pause, cell_size * 7.5, cell_size * 9.2, font_size_small)
+            menu_rect = displayText(win, dark, 'Menu', cell_size * 0.5, cell_size * 11.2, font_size_small)
+            undo_rect = displayText(win, dark, 'Undo', cell_size * 2.5, cell_size * 11.2, font_size_small)
+            redo_rect = displayText(win, dark, 'Redo', cell_size * 3.75, cell_size * 11.2, font_size_small)
+            hint_rect = displayText(win, dark, 'Hint', cell_size * 5.75, cell_size * 11.2, font_size_small)
+            solution_rect = displayText(win, dark, 'Solution', cell_size * 7, cell_size * 11.2, font_size_small)
             pygame.display.update()
+            if play:
+                dt += time.time() - start_time
+                start_time = time.time()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.display.quit()
@@ -277,6 +314,24 @@ if __name__ == '__main__':
                         else:
                             empty = False
                         markCellsLogic(x_pos, y_pos, empty)
+                    if play_pause_rect.collidepoint(mouse_pos):
+                        if dark:
+                            col = 'black'
+                        else:
+                            col = 'white'
+                        if play_pause == 'Play':
+                            play_pause = 'Pause'
+                            play = True
+                            start_time = time.time()
+                            pygame.draw.rect(win, col, (
+                                math.floor(cell_size * 7.5), math.floor(cell_size * 9.2), math.floor(cell_size * 2),
+                                math.floor(cell_size * 0.75)))
+                        elif play_pause == 'Pause':
+                            play_pause = 'Play'
+                            play = False
+                            pygame.draw.rect(win, col, (
+                                math.floor(cell_size * 7.5), math.floor(cell_size * 9.2), math.floor(cell_size * 2),
+                                math.floor(cell_size * 0.75)))
             first = False
             # TODO: main solving screen with 9 x 9 grid, time, pause & play, verification-switch
             #  digits 1 to 9 as inputs, undo & redo, hint and show solution button.
