@@ -5,6 +5,7 @@ import sys
 import datetime
 import time
 import math
+import copy
 
 blank_sudoku = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -42,12 +43,12 @@ def displayText(surface, dark_info, txt, x, y, size, start=True):
         if start:
             colo = (255, 255, 255)
         else:
-            colo = (63, 192, 204)
+            colo = (51, 207, 255)
     else:
         if start:
             colo = (0, 0, 0)
         else:
-            colo = (63, 192, 204)
+            colo = (51, 207, 255)
     comic_sans = pygame.font.SysFont('calibri', size)
     txt_surface = comic_sans.render(txt, False, colo)
     txt_rect = txt_surface.get_rect(topleft=(x, y))
@@ -259,9 +260,9 @@ if __name__ == '__main__':
         pygame.display.update()
         clock.tick(FPS)
         first = True
-        current_sudoku = blank_sudoku.copy()
-        current_sudoku_start = blank_sudoku.copy()
-        current_solution = blank_sudoku.copy()
+        current_sudoku = copy.deepcopy(blank_sudoku)
+        current_sudoku_start = copy.deepcopy(blank_sudoku)
+        current_solution = copy.deepcopy(blank_sudoku)
         marked_num = 0
         saved_num = 0
         play_pause = 'Pause'
@@ -279,7 +280,7 @@ if __name__ == '__main__':
                 solutions_list = data.solutions[difficulty]
                 rand_num = random.randint(0, len(sudokus_list) - 1)
                 current_sudoku_start = sudokus_list[rand_num].copy()
-                current_sudoku = blank_sudoku.copy()
+                current_sudoku = copy.deepcopy(blank_sudoku)
                 current_solution = solutions_list[rand_num].copy()
                 drawGrid(win, dark)
                 displaySudoku(win, dark, current_sudoku_start, True)
@@ -368,5 +369,6 @@ if __name__ == '__main__':
                                 math.floor(cell_size * 7.5), math.floor(cell_size * 9.2), math.floor(cell_size * 2),
                                 math.floor(cell_size * 0.75)))
             first = False
-            # TODO: fixing changing blank sudoku, white box when stop, undo & redo logic, hint & solution logic, ending
-            #  screen, updating record time (with text file)
+            # TODO: white box when stop, undo & redo logic, hint & solution logic, ending
+            #  screen, updating record time (with text file), design and set icon 211
+
