@@ -442,4 +442,5 @@ if __name__ == '__main__':
                             menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 10, font_size_default)
             first = False
             # TODO: Hint -> no record, check ending screen (record breaking), updating record time (with text file),
-            #  design and set icon (line 211), darker colour for inserted numbers
+            #  design and set icon (line 211), darker colour for inserted numbers, sudoku generating animation,
+            #  inserserted numbers marking, hint bug
