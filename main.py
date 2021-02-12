@@ -57,24 +57,24 @@ def displayText(surface, dark_info, txt, x, y, size, start=True):
     return txt_rect
 
 
-def drawMenu(surface, dark_info, ti_easy, ti_medium, ti_hard, ti_expert):
+def drawMenu(surface, dark_info, ti_easy, ti_medium, ti_hard, ti_very_hard):
     displayText(surface, dark_info, 'Difficulty', cell_size, cell_size * 0.2, font_size_big)
     easy_r = displayText(surface, dark_info, 'Easy', cell_size, cell_size * 2, font_size_default)
     medium_r = displayText(surface, dark_info, 'Medium', cell_size, cell_size * 4, font_size_default)
     hard_r = displayText(surface, dark_info, 'Hard', cell_size, cell_size * 6, font_size_default)
-    expert_r = displayText(surface, dark_info, 'Very Hard', cell_size, cell_size * 8, font_size_default)
+    very_hard_r = displayText(surface, dark_info, 'Very Hard', cell_size, cell_size * 8, font_size_default)
     displayText(surface, dark_info, 'Record', cell_size * 5, cell_size * 0.2, font_size_big)
     displayText(surface, dark_info, str(ti_easy), cell_size * 5, cell_size * 2, font_size_default)
     displayText(surface, dark_info, str(ti_medium), cell_size * 5, cell_size * 4, font_size_default)
     displayText(surface, dark_info, str(ti_hard), cell_size * 5, cell_size * 6, font_size_default)
-    displayText(surface, dark_info, str(ti_expert), cell_size * 5, cell_size * 8, font_size_default)
+    displayText(surface, dark_info, str(ti_very_hard), cell_size * 5, cell_size * 8, font_size_default)
     displayText(surface, dark_info, 'Theme:', cell_size, cell_size * 9.75, font_size_small)
     dark_info_rect = displayText(surface, dark_info, 'Dark', cell_size * 4, cell_size * 9.75, font_size_small)
     bright_r = displayText(surface, dark_info, 'Bright', cell_size * 6, cell_size * 9.75, font_size_small)
     displayText(surface, dark_info, 'For the Sudokus:', cell_size, cell_size * 11, font_size_very_small)
     displayText(surface, dark_info, '© Memory-Improvement-Tips.com. Used by Permission.', cell_size, cell_size * 11.5,
                 font_size_very_small)
-    return easy_r, medium_r, hard_r, expert_r, dark_info_rect, bright_r
+    return easy_r, medium_r, hard_r, very_hard_r, dark_info_rect, bright_r
 
 
 def displaySudoku(surface, dark_info, sudoku, start):
@@ -200,6 +200,7 @@ if __name__ == '__main__':
     font_size_small = 27
     font_size_default = 35
     font_size_big = 45
+    first_loop = True
     clock = pygame.time.Clock()
     win = pygame.display.set_mode((cell_size * 9, cell_size * 12))
     pygame.display.set_caption('Sudoku')
@@ -211,15 +212,18 @@ if __name__ == '__main__':
     # pygame.display.set_icon() TODO: Design and set icon
     while playing:
         difficulty = 0
-        t_easy = t_medium = t_hard = t_expert = time.gmtime(86399)
+        global t_easy, t_medium, t_hard, t_very_hard
+        if first_loop:
+            t_easy = t_medium = t_hard = t_very_hard = time.gmtime(86399)
+            first_loop = False
         time_easy = time.strftime('%H:%M:%S', t_easy)
         time_medium = time.strftime('%H:%M:%S', t_medium)
         time_hard = time.strftime('%H:%M:%S', t_hard)
-        time_expert = time.strftime('%H:%M:%S', t_expert)
-        easy_rect, medium_rect, hard_rect, expert_rect, dark_rect, bright_rect = drawMenu(win, dark, time_easy,
-                                                                                          time_medium, time_hard,
-                                                                                          time_expert)
-        times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_expert}
+        time_very_hard = time.strftime('%H:%M:%S', t_very_hard)
+        easy_rect, medium_rect, hard_rect, very_hard_rect, dark_rect, bright_rect = drawMenu(win, dark, time_easy,
+                                                                                             time_medium, time_hard,
+                                                                                             time_very_hard)
+        times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
@@ -229,7 +233,7 @@ if __name__ == '__main__':
                     difficulty = 2
                 if hard_rect.collidepoint(mouse_pos):
                     difficulty = 3
-                if expert_rect.collidepoint(mouse_pos):
+                if very_hard_rect.collidepoint(mouse_pos):
                     difficulty = 4
                 if dark_rect.collidepoint(mouse_pos):
                     dark = True
@@ -238,11 +242,11 @@ if __name__ == '__main__':
                     else:
                         bg_col = 'white'
                     win.fill(color=bg_col)
-                    easy_rect, medium_rect, hard_rect, expert_rect, dark_rect, bright_rect = drawMenu(win, dark,
-                                                                                                      time_easy,
-                                                                                                      time_medium,
-                                                                                                      time_hard,
-                                                                                                      time_expert)
+                    easy_rect, medium_rect, hard_rect, very_hard_rect, dark_rect, bright_rect = drawMenu(win, dark,
+                                                                                                         time_easy,
+                                                                                                         time_medium,
+                                                                                                         time_hard,
+                                                                                                         time_very_hard)
                 if bright_rect.collidepoint(mouse_pos):
                     dark = False
                     if dark:
@@ -250,11 +254,11 @@ if __name__ == '__main__':
                     else:
                         bg_col = 'white'
                     win.fill(color=bg_col)
-                    easy_rect, medium_rect, hard_rect, expert_rect, dark_rect, bright_rect = drawMenu(win, dark,
-                                                                                                      time_easy,
-                                                                                                      time_medium,
-                                                                                                      time_hard,
-                                                                                                      time_expert)
+                    easy_rect, medium_rect, hard_rect, very_hard_rect, dark_rect, bright_rect = drawMenu(win, dark,
+                                                                                                         time_easy,
+                                                                                                         time_medium,
+                                                                                                         time_hard,
+                                                                                                         time_very_hard)
             if event.type == pygame.QUIT:
                 playing = False
                 pygame.display.quit()
@@ -293,6 +297,7 @@ if __name__ == '__main__':
                 drawGrid(win, dark)
                 displaySudoku(win, dark, current_sudoku_start, True)
                 displaySudoku(win, dark, current_sudoku, False)
+                first = False
             if not solved:
                 num1, num2, num3, num4, num5, num6, num7, num8, num9 = displayNumbers(win)
                 displayText(win, dark, 'Time:', cell_size * 4.5, cell_size * 9.8, font_size_default)
@@ -350,7 +355,8 @@ if __name__ == '__main__':
                             displaySudoku(win, dark, current_sudoku_start, True)
                             displaySudoku(win, dark, current_sudoku, False)
                     if 0 <= x_pos <= cell_size * 9 and 0 <= y_pos <= cell_size * 9:
-                        if current_sudoku_start[y_pos // cell_size][x_pos // cell_size] == 0:
+                        if current_sudoku_start[y_pos // cell_size][x_pos // cell_size] == 0 and \
+                                current_sudoku[y_pos // cell_size][x_pos // cell_size] == 0:
                             empty = True
                             marked_cell = (y_pos // cell_size, x_pos // cell_size)
                         else:
@@ -360,7 +366,9 @@ if __name__ == '__main__':
                     col = marked_cell[1]
                     if hint_rect.collidepoint(mouse_pos):
                         if empty:
-                            current_sudoku[row][col] = current_solution[row][col]
+                            solution_number = current_solution[row][col]
+                            moves.append((row, col, solution_number))
+                            current_sudoku[row][col] = solution_number
                             win.fill(color=bg_col)
                             drawGrid(win, dark)
                             displaySudoku(win, dark, current_sudoku_start, True)
@@ -420,27 +428,25 @@ if __name__ == '__main__':
                                 math.floor(cell_size * 7.5), math.floor(cell_size * 9.2), math.floor(cell_size * 2),
                                 math.floor(cell_size * 0.75)))
                             pygame.draw.rect(win, bg_col, (0, 0, cell_size * 9, cell_size * 9 + 2))
-                    solved = True
-                    for i in range(9):
-                        for j in range(9):
-                            if current_sudoku_start[i][j] == 0 and current_sudoku[i][j] != current_solution[i][j]:
-                                solved = False
-                    if solved and difficulty != 0:
-                        print(f'BG-Colour: {bg_col}')
-                        pygame.draw.rect(win, bg_col, (0, cell_size * 9, cell_size * 9, cell_size * 3))
-                        if cheated:
-                            play = False
-                            displayText(win, dark, 'This is the solution. Try again?', cell_size * 0.5, cell_size * 10,
-                                        font_size_small)
-                            menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 10, font_size_default)
-                        else:
-                            play = False
-                            if time.gmtime(dt) < times[difficulty]:
-                                times[difficulty] = time.gmtime(dt)
-                            displayText(win, dark, 'Congrats! You solved the Sudoku', cell_size * 0.5, cell_size * 10,
-                                        font_size_small)
-                            menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 10, font_size_default)
-            first = False
+            solved = True
+            for i in range(9):
+                for j in range(9):
+                    if current_sudoku_start[i][j] == 0 and current_sudoku[i][j] != current_solution[i][j]:
+                        solved = False
+            if solved and difficulty != 0:
+                pygame.draw.rect(win, bg_col, (0, cell_size * 9, cell_size * 9, cell_size * 3))
+                if cheated:
+                    play = False
+                    displayText(win, dark, 'This is the solution. Try again?', cell_size * 0.5, cell_size * 10,
+                                font_size_small)
+                    menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 10, font_size_default)
+                else:
+                    play = False
+                    if time.gmtime(dt) < times[difficulty]:
+                        times[difficulty] = time.gmtime(dt)
+                    displayText(win, dark, 'Congrats! You solved the Sudoku', cell_size * 0.5, cell_size * 10,
+                                font_size_small)
+                    menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 10, font_size_default)
+
             # TODO: Hint -> no record, check ending screen (record breaking), updating record time (with text file),
-            #  design and set icon (line 211), darker colour for inserted numbers, sudoku generating animation,
-            #  inserserted numbers marking, hint bug
+            #  design and set icon (line 211), darker colour for inserted numbers, sudoku generating animation.
