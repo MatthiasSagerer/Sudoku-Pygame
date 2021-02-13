@@ -42,12 +42,12 @@ def displayText(surface, dark_info, txt, x, y, size, start=True):
         if start:
             colo = (255, 255, 255)
         else:
-            colo = (51, 207, 255)
+            colo = (3, 132, 252)
     else:
         if start:
             colo = (0, 0, 0)
         else:
-            colo = (51, 207, 255)
+            colo = (3, 132, 252)
     comic_sans = pygame.font.SysFont('calibri', size)
     txt_surface = comic_sans.render(txt, False, colo)
     txt_rect = txt_surface.get_rect(topleft=(x, y))
@@ -195,7 +195,7 @@ if __name__ == '__main__':
     dark = False
     playing = True
     FPS = 90
-    cell_size = 55
+    cell_size = 50
     font_size_very_small = 18
     font_size_small = 27
     font_size_default = 35
@@ -216,14 +216,14 @@ if __name__ == '__main__':
         if first_loop:
             t_easy = t_medium = t_hard = t_very_hard = time.gmtime(86399)
             first_loop = False
-        time_easy = time.strftime('%H:%M:%S', t_easy)
-        time_medium = time.strftime('%H:%M:%S', t_medium)
-        time_hard = time.strftime('%H:%M:%S', t_hard)
-        time_very_hard = time.strftime('%H:%M:%S', t_very_hard)
+        times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
+        time_easy = time.strftime('%H:%M:%S', times[1])
+        time_medium = time.strftime('%H:%M:%S', times[2])
+        time_hard = time.strftime('%H:%M:%S', times[3])
+        time_very_hard = time.strftime('%H:%M:%S', times[4])
         easy_rect, medium_rect, hard_rect, very_hard_rect, dark_rect, bright_rect = drawMenu(win, dark, time_easy,
                                                                                              time_medium, time_hard,
                                                                                              time_very_hard)
-        times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
@@ -282,6 +282,7 @@ if __name__ == '__main__':
         solved = False
         marked_cell = (-1, -1)
         empty = False
+        display_endscreen = True
         global num1, num2, num3, num4, num5, num6, num7, num8, num9
         global menu_rect, undo_rect, redo_rect, solution_rect, hint_rect, play_pause_rect
         if difficulty != 0:
@@ -333,6 +334,7 @@ if __name__ == '__main__':
                         else:
                             bg_col = 'white'
                         difficulty = 0
+                        solved = False
                         win.fill(color=bg_col)
                     x_pos = mouse_pos[0]
                     y_pos = mouse_pos[1]
@@ -373,6 +375,7 @@ if __name__ == '__main__':
                             drawGrid(win, dark)
                             displaySudoku(win, dark, current_sudoku_start, True)
                             displaySudoku(win, dark, current_sudoku, False)
+                            cheated = True
                     if solution_rect.collidepoint(mouse_pos):
                         for i in range(9):
                             for j in range(9):
@@ -433,20 +436,24 @@ if __name__ == '__main__':
                 for j in range(9):
                     if current_sudoku_start[i][j] == 0 and current_sudoku[i][j] != current_solution[i][j]:
                         solved = False
-            if solved and difficulty != 0:
+            if solved and display_endscreen:
                 pygame.draw.rect(win, bg_col, (0, cell_size * 9, cell_size * 9, cell_size * 3))
+                menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 11, font_size_default)
+                play = False
+                print(f'Time: {time.strftime("%H:%M:%S",time.gmtime(dt))}, Record: {time.strftime("%H:%M:%S", times[difficulty])}')
+                print(f'time.gmtime(dt) < times[difficulty]: {time.gmtime(dt) < times[difficulty]}')
                 if cheated:
-                    play = False
-                    displayText(win, dark, 'This is the solution. Try again?', cell_size * 0.5, cell_size * 10,
+                    displayText(win, dark, 'This is the solution. Try again?', cell_size * 0.25, cell_size * 10,
                                 font_size_small)
-                    menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 10, font_size_default)
                 else:
-                    play = False
                     if time.gmtime(dt) < times[difficulty]:
                         times[difficulty] = time.gmtime(dt)
-                    displayText(win, dark, 'Congrats! You solved the Sudoku', cell_size * 0.5, cell_size * 10,
+                        print(f'times: {times}')
+                        print(f'times[difficulty]: {times[difficulty]}')
+                    displayText(win, dark, 'Congrats, you solved the Sudoku!', cell_size * 0.25, cell_size * 10,
                                 font_size_small)
-                    menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 10, font_size_default)
+                display_endscreen = False
 
             # TODO: Hint -> no record, check ending screen (record breaking), updating record time (with text file),
-            #  design and set icon (line 211), darker colour for inserted numbers, sudoku generating animation.
+            #  design and set icon (line 211), sudoku generating animation.
+            #  Code compressions: Display class.
