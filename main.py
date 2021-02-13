@@ -83,6 +83,8 @@ def displaySudoku(surface, dark_info, sudoku, start):
             if sudoku[n][k] != 0:
                 displayText(surface, dark_info, str(sudoku[n][k]), cell_size * (k + 0.32), cell_size * (n + 0.17),
                             font_size_big, start=start)
+                if start and first:
+                    time.sleep(0.05)
             else:
                 continue
 
@@ -273,7 +275,6 @@ if __name__ == '__main__':
         marked_num = 0
         saved_num = 0
         play_pause = 'Pause'
-        start_time = time.time()
         dt = 0
         play = True
         moves = []
@@ -282,7 +283,8 @@ if __name__ == '__main__':
         solved = False
         marked_cell = (-1, -1)
         empty = False
-        display_endscreen = True
+        display_end_screen = True
+        global start_time
         global num1, num2, num3, num4, num5, num6, num7, num8, num9
         global menu_rect, undo_rect, redo_rect, solution_rect, hint_rect, play_pause_rect
         if difficulty != 0:
@@ -299,6 +301,7 @@ if __name__ == '__main__':
                 displaySudoku(win, dark, current_sudoku_start, True)
                 displaySudoku(win, dark, current_sudoku, False)
                 first = False
+                start_time = time.time()
             if not solved:
                 num1, num2, num3, num4, num5, num6, num7, num8, num9 = displayNumbers(win)
                 displayText(win, dark, 'Time:', cell_size * 4.5, cell_size * 9.8, font_size_default)
@@ -317,7 +320,7 @@ if __name__ == '__main__':
                 hint_rect = displayText(win, dark, 'Hint', cell_size * 5.75, cell_size * 11.2, font_size_small)
                 solution_rect = displayText(win, dark, 'Solution', cell_size * 7, cell_size * 11.2, font_size_small)
             pygame.display.update()
-            if play:
+            if play and not first:
                 dt += time.time() - start_time
                 start_time = time.time()
             for event in pygame.event.get():
@@ -436,11 +439,13 @@ if __name__ == '__main__':
                 for j in range(9):
                     if current_sudoku_start[i][j] == 0 and current_sudoku[i][j] != current_solution[i][j]:
                         solved = False
-            if solved and display_endscreen:
+            if solved and display_end_screen:
                 pygame.draw.rect(win, bg_col, (0, cell_size * 9, cell_size * 9, cell_size * 3))
                 menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 11, font_size_default)
                 play = False
-                print(f'Time: {time.strftime("%H:%M:%S",time.gmtime(dt))}, Record: {time.strftime("%H:%M:%S", times[difficulty])}')
+                print(
+                    f'Time: {time.strftime("%H:%M:%S", time.gmtime(dt))},'
+                    f'Record: {time.strftime("%H:%M:%S", times[difficulty])}')
                 print(f'time.gmtime(dt) < times[difficulty]: {time.gmtime(dt) < times[difficulty]}')
                 if cheated:
                     displayText(win, dark, 'This is the solution. Try again?', cell_size * 0.25, cell_size * 10,
@@ -452,7 +457,7 @@ if __name__ == '__main__':
                         print(f'times[difficulty]: {times[difficulty]}')
                     displayText(win, dark, 'Congrats, you solved the Sudoku!', cell_size * 0.25, cell_size * 10,
                                 font_size_small)
-                display_endscreen = False
+                display_end_screen = False
 
             # TODO: updating record time (with text file), design and set icon (line 211), sudoku generating animation.
             #  Code compressions: Display class.
