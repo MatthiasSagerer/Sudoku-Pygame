@@ -454,6 +454,5 @@ if __name__ == '__main__':
                                 font_size_small)
                 display_endscreen = False
 
-            # TODO: Hint -> no record, check ending screen (record breaking), updating record time (with text file),
-            #  design and set icon (line 211), sudoku generating animation.
+            # TODO: updating record time (with text file), design and set icon (line 211), sudoku generating animation.
             #  Code compressions: Display class.
