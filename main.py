@@ -197,7 +197,7 @@ if __name__ == '__main__':
     dark = False
     playing = True
     FPS = 90
-    cell_size = 50
+    cell_size = 55
     font_size_very_small = 18
     font_size_small = 27
     font_size_default = 35
@@ -217,8 +217,8 @@ if __name__ == '__main__':
         global t_easy, t_medium, t_hard, t_very_hard
         if first_loop:
             t_easy = t_medium = t_hard = t_very_hard = time.gmtime(86399)
+            times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
             first_loop = False
-        times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
         time_easy = time.strftime('%H:%M:%S', times[1])
         time_medium = time.strftime('%H:%M:%S', times[2])
         time_hard = time.strftime('%H:%M:%S', times[3])
@@ -459,5 +459,4 @@ if __name__ == '__main__':
                                 font_size_small)
                 display_end_screen = False
 
-            # TODO: updating record time (with text file), design and set icon (line 211), sudoku generating animation.
-            #  Code compressions: Display class.
+            # TODO: update rec time (with text file), design and set icon (line 214).Code compressions: Display class.
