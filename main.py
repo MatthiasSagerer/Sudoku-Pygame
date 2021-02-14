@@ -84,7 +84,7 @@ def displaySudoku(surface, dark_info, sudoku, start):
                 displayText(surface, dark_info, str(sudoku[n][k]), cell_size * (k + 0.32), cell_size * (n + 0.17),
                             font_size_big, start=start)
                 if start and first:
-                    time.sleep(0.05)
+                    time.sleep(0.04)
             else:
                 continue
 
@@ -164,8 +164,6 @@ def markCellsLogic(x_p, y_p, empt):
                 markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
                 markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
                 saved_num = current_sudoku[y_p // cell_size][x_p // cell_size]
-            displaySudoku(win, dark, current_sudoku_start, True)
-            displaySudoku(win, dark, current_sudoku, False)
         elif (current_sudoku_start[y_p // cell_size][x_p // cell_size] != 0) or empt:
             win.fill(color=bg_col)
             drawGrid(win, dark)
@@ -176,8 +174,8 @@ def markCellsLogic(x_p, y_p, empt):
                 saved_num = current_sudoku_start[y_p // cell_size][x_p // cell_size]
             else:
                 saved_num = 0
-            displaySudoku(win, dark, current_sudoku_start, True)
-            displaySudoku(win, dark, current_sudoku, False)
+        displaySudoku(win, dark, current_sudoku_start, True)
+        displaySudoku(win, dark, current_sudoku, False)
 
 
 def displayNumbers(surface):
@@ -214,7 +212,7 @@ if __name__ == '__main__':
     # pygame.display.set_icon() TODO: Design and set icon
     while playing:
         difficulty = 0
-        global t_easy, t_medium, t_hard, t_very_hard
+        global t_easy, t_medium, t_hard, t_very_hard, times
         if first_loop:
             t_easy = t_medium = t_hard = t_very_hard = time.gmtime(86399)
             times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
@@ -379,10 +377,10 @@ if __name__ == '__main__':
                             displaySudoku(win, dark, current_sudoku_start, True)
                             displaySudoku(win, dark, current_sudoku, False)
                             cheated = True
-                    if solution_rect.collidepoint(mouse_pos):
+                    if solution_rect.collidepoint(mouse_pos) and not solved:
                         for i in range(9):
                             for j in range(9):
-                                if current_sudoku[i][j] == 0 and current_sudoku_start[i][j] == 0:
+                                if current_sudoku_start[i][j] == 0:
                                     current_sudoku[i][j] = current_solution[i][j]
                         cheated = True
                         solved = True
@@ -443,20 +441,14 @@ if __name__ == '__main__':
                 pygame.draw.rect(win, bg_col, (0, cell_size * 9, cell_size * 9, cell_size * 3))
                 menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 11, font_size_default)
                 play = False
-                print(
-                    f'Time: {time.strftime("%H:%M:%S", time.gmtime(dt))},'
-                    f'Record: {time.strftime("%H:%M:%S", times[difficulty])}')
-                print(f'time.gmtime(dt) < times[difficulty]: {time.gmtime(dt) < times[difficulty]}')
                 if cheated:
                     displayText(win, dark, 'This is the solution. Try again?', cell_size * 0.25, cell_size * 10,
                                 font_size_small)
                 else:
                     if time.gmtime(dt) < times[difficulty]:
                         times[difficulty] = time.gmtime(dt)
-                        print(f'times: {times}')
-                        print(f'times[difficulty]: {times[difficulty]}')
                     displayText(win, dark, 'Congrats, you solved the Sudoku!', cell_size * 0.25, cell_size * 10,
                                 font_size_small)
                 display_end_screen = False
 
-            # TODO: update rec time (with text file), design and set icon (line 214).Code compressions: Display class.
+            # TODO: record text file, design and set icon (line 214). Code compressions: Display class.
