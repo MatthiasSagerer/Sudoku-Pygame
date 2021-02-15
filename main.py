@@ -212,10 +212,21 @@ if __name__ == '__main__':
     # pygame.display.set_icon() TODO: Design and set icon
     while playing:
         difficulty = 0
+        records = open('records.txt', 'r')
         global t_easy, t_medium, t_hard, t_very_hard, times
         if first_loop:
             t_easy = t_medium = t_hard = t_very_hard = time.gmtime(86399)
             times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
+            with open('./records.txt') as file:
+                lines = file.readlines()
+                t_easy = time.gmtime(int(lines[0][:-1]))
+                t_medium = time.gmtime(int(lines[1][:-1]))
+                t_hard = time.gmtime(int(lines[2][:-1]))
+                t_very_hard = time.gmtime(int(lines[3]))
+            print(t_easy)
+            print(t_medium)
+            print(t_hard)
+            print(t_very_hard)
             first_loop = False
         time_easy = time.strftime('%H:%M:%S', times[1])
         time_medium = time.strftime('%H:%M:%S', times[2])
@@ -446,9 +457,21 @@ if __name__ == '__main__':
                                 font_size_small)
                 else:
                     if time.gmtime(dt) < times[difficulty]:
-                        times[difficulty] = time.gmtime(dt)
+                        if difficulty == 0:
+                            t_easy = time.gmtime(dt)
+                        if difficulty == 1:
+                            t_medium =time.gmtime(dt)
+                        if difficulty == 2:
+                            t_hard = time.gmtime(dt)
+                        if difficulty == 3:
+                            t_very_hard = time.gmtime(dt)
+                            # TODO: writing seconds not time objects to file
+                        with open('records.txt', 'w+') as file:
+                            file.write(f'{times[1]}\n{times[2]}\n{times[3]}\n{times[4]}')
                     displayText(win, dark, 'Congrats, you solved the Sudoku!', cell_size * 0.25, cell_size * 10,
                                 font_size_small)
                 display_end_screen = False
 
-            # TODO: record text file, design and set icon (line 214). Code compressions: Display class.
+            # TODO: record text file, design and set icon (line 214).
+            # Code compressions: Display class. fixing end screen and rec update
+
