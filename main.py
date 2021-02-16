@@ -5,6 +5,7 @@ import sys
 import time
 import math
 import copy
+import calendar
 
 blank_sudoku = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -145,37 +146,38 @@ pygame.font.init()
 
 def markCellsLogic(x_p, y_p, empt):
     global saved_num, marked_num
-    if empt:
-        if dark:
-            colo = (40, 40, 40)
-        else:
-            colo = (230, 230, 230)
-    else:
-        if dark:
-            colo = (0, 108, 36)
-        else:
-            colo = (166, 255, 184)
-    if 0 <= x_p <= cell_size * 9 and 0 <= y_p <= cell_size * 9:
-        if (current_sudoku[y_p // cell_size][x_p // cell_size] != 0) or empt:
-            win.fill(color=bg_col)
-            drawGrid(win, dark)
-            marked_num = current_sudoku[y_p // cell_size][x_p // cell_size]
-            if (marked_num != 0 and marked_num != saved_num) or empt:
-                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
-                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
-                saved_num = current_sudoku[y_p // cell_size][x_p // cell_size]
-        elif (current_sudoku_start[y_p // cell_size][x_p // cell_size] != 0) or empt:
-            win.fill(color=bg_col)
-            drawGrid(win, dark)
-            marked_num = current_sudoku_start[y_p // cell_size][x_p // cell_size]
-            if (marked_num != 0 and marked_num != saved_num) or empt:
-                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
-                markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
-                saved_num = current_sudoku_start[y_p // cell_size][x_p // cell_size]
+    if not solved:
+        if empt:
+            if dark:
+                colo = (40, 40, 40)
             else:
-                saved_num = 0
-        displaySudoku(win, dark, current_sudoku_start, True)
-        displaySudoku(win, dark, current_sudoku, False)
+                colo = (230, 230, 230)
+        else:
+            if dark:
+                colo = (0, 108, 36)
+            else:
+                colo = (166, 255, 184)
+        if 0 <= x_p <= cell_size * 9 and 0 <= y_p <= cell_size * 9:
+            if (current_sudoku[y_p // cell_size][x_p // cell_size] != 0) or empt:
+                win.fill(color=bg_col)
+                drawGrid(win, dark)
+                marked_num = current_sudoku[y_p // cell_size][x_p // cell_size]
+                if (marked_num != 0 and marked_num != saved_num) or empt:
+                    markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
+                    markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
+                    saved_num = current_sudoku[y_p // cell_size][x_p // cell_size]
+            elif (current_sudoku_start[y_p // cell_size][x_p // cell_size] != 0) or empt:
+                win.fill(color=bg_col)
+                drawGrid(win, dark)
+                marked_num = current_sudoku_start[y_p // cell_size][x_p // cell_size]
+                if (marked_num != 0 and marked_num != saved_num) or empt:
+                    markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
+                    markCells(win, marked_num, current_sudoku, current_sudoku_start, empt, x_p, y_p, colo=colo)
+                    saved_num = current_sudoku_start[y_p // cell_size][x_p // cell_size]
+                else:
+                    saved_num = 0
+            displaySudoku(win, dark, current_sudoku_start, True)
+            displaySudoku(win, dark, current_sudoku, False)
 
 
 def displayNumbers(surface):
@@ -223,10 +225,6 @@ if __name__ == '__main__':
                 t_medium = time.gmtime(int(lines[1][:-1]))
                 t_hard = time.gmtime(int(lines[2][:-1]))
                 t_very_hard = time.gmtime(int(lines[3]))
-            print(t_easy)
-            print(t_medium)
-            print(t_hard)
-            print(t_very_hard)
             first_loop = False
         time_easy = time.strftime('%H:%M:%S', times[1])
         time_medium = time.strftime('%H:%M:%S', times[2])
@@ -460,18 +458,18 @@ if __name__ == '__main__':
                         if difficulty == 0:
                             t_easy = time.gmtime(dt)
                         if difficulty == 1:
-                            t_medium =time.gmtime(dt)
+                            t_medium = time.gmtime(dt)
                         if difficulty == 2:
                             t_hard = time.gmtime(dt)
                         if difficulty == 3:
                             t_very_hard = time.gmtime(dt)
-                            # TODO: writing seconds not time objects to file
                         with open('records.txt', 'w+') as file:
-                            file.write(f'{times[1]}\n{times[2]}\n{times[3]}\n{times[4]}')
+                            file.write(
+                                f'{calendar.timegm(times[1])}\n{calendar.timegm(times[2])}\n{calendar.timegm(times[3])}\n{calendar.timegm(times[4])}')
                     displayText(win, dark, 'Congrats, you solved the Sudoku!', cell_size * 0.25, cell_size * 10,
                                 font_size_small)
                 display_end_screen = False
 
-            # TODO: record text file, design and set icon (line 214).
+            # TODO: record text file, design and set icon (line 214), updating record in game & .txt file,
+            #  end screen show time and record breaking, fixing menu_rect after solved game bug
             # Code compressions: Display class. fixing end screen and rec update
-
