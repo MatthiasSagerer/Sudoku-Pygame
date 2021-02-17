@@ -479,6 +479,5 @@ if __name__ == '__main__':
                                 font_size_small)
                 display_end_screen = False
 
-            # TODO: design and set icon (line 214),
-            #  end screen show time and record breaking,
-            #  Code compressions: Display class. fixing end screen and record update
+            # TODO: design and set icon (line 214), end screen: show time and record breaking,
+            #  Code compressions: Display class.
