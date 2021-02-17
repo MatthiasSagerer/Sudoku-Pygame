@@ -218,14 +218,13 @@ if __name__ == '__main__':
         records = open('records.txt', 'r')
         global t_easy, t_medium, t_hard, t_very_hard, times
         if first_loop:
-            t_easy = t_medium = t_hard = t_very_hard = time.gmtime(86399)
-            times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
             with open('./records.txt') as file:
                 lines = file.readlines()
                 t_easy = time.gmtime(int(lines[0][:-1]))
                 t_medium = time.gmtime(int(lines[1][:-1]))
                 t_hard = time.gmtime(int(lines[2][:-1]))
                 t_very_hard = time.gmtime(int(lines[3]))
+            times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
             first_loop = False
         time_easy = time.strftime('%H:%M:%S', times[1])
         time_medium = time.strftime('%H:%M:%S', times[2])
@@ -461,21 +460,25 @@ if __name__ == '__main__':
                                 font_size_small)
                 else:
                     if time.gmtime(dt) < times[difficulty]:
-                        if difficulty == 0:
-                            t_easy = time.gmtime(dt)
+                        print(time.gmtime(dt) < times[difficulty])
+                        print(f'time: {dt}')
                         if difficulty == 1:
-                            t_medium = time.gmtime(dt)
+                            t_easy = time.gmtime(dt)
+                            print(t_easy)
                         if difficulty == 2:
-                            t_hard = time.gmtime(dt)
+                            t_medium = time.gmtime(dt)
                         if difficulty == 3:
+                            t_hard = time.gmtime(dt)
+                        if difficulty == 4:
                             t_very_hard = time.gmtime(dt)
-                        with open('records.txt', 'w+') as file:
+                        times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
+                        with open('records.txt', 'w') as file:
                             file.write(
                                 f'{calendar.timegm(times[1])}\n{calendar.timegm(times[2])}\n{calendar.timegm(times[3])}\n{calendar.timegm(times[4])}')
                     displayText(win, dark, 'Congrats, you solved the Sudoku!', cell_size * 0.25, cell_size * 10,
                                 font_size_small)
                 display_end_screen = False
 
-            # TODO: record text file, design and set icon (line 214), updating record in game & .txt file,
+            # TODO: design and set icon (line 214),
             #  end screen show time and record breaking,
             #  Code compressions: Display class. fixing end screen and record update
