@@ -21,21 +21,22 @@ blank_sudoku = [
 
 
 def drawGrid(surface, dark_info):
-    if dark_info:
-        colo = (255, 255, 255)
-    else:
-        colo = (0, 0, 0)
-    x = 0
-    y = 0
-    w = 1
-    for n in range(10):
-        if n % 3 == 0:
-            w = 3
-        pygame.draw.line(surface, colo, (x, 0), (x, cell_size * 9), width=w)
-        pygame.draw.line(surface, colo, (0, y), (cell_size * 9, y), width=w)
-        x += cell_size
-        y += cell_size
+    if grid:
+        if dark_info:
+            colo = (255, 255, 255)
+        else:
+            colo = (0, 0, 0)
+        x = 0
+        y = 0
         w = 1
+        for n in range(10):
+            if n % 3 == 0:
+                w = 3
+            pygame.draw.line(surface, colo, (x, 0), (x, cell_size * 9), width=w)
+            pygame.draw.line(surface, colo, (0, y), (cell_size * 9, y), width=w)
+            x += cell_size
+            y += cell_size
+            w = 1
 
 
 def displayText(surface, dark_info, txt, x, y, size, start=True):
@@ -287,17 +288,18 @@ if __name__ == '__main__':
         moves = []
         redo = []
         cheated = False
-        solved = False
         marked_cell = (-1, -1)
         empty = False
         display_end_screen = True
-        global start_time
+        global start_time, solved, grid
         global num1, num2, num3, num4, num5, num6, num7, num8, num9
         global menu_rect, undo_rect, redo_rect, solution_rect, hint_rect, play_pause_rect
         if difficulty != 0:
             win.fill(color=bg_col)
         while difficulty != 0:
             if first:
+                solved = False
+                grid = True
                 sudokus_list = data.sudokus[difficulty]
                 solutions_list = data.solutions[difficulty]
                 rand_num = random.randint(0, len(sudokus_list) - 1)
@@ -345,6 +347,10 @@ if __name__ == '__main__':
                             bg_col = 'white'
                         difficulty = 0
                         solved = False
+                        grid = False
+                        current_sudoku = copy.deepcopy(blank_sudoku)
+                        current_sudoku_start = copy.deepcopy(blank_sudoku)
+                        current_solution = copy.deepcopy(blank_sudoku)
                         win.fill(color=bg_col)
                     x_pos = mouse_pos[0]
                     y_pos = mouse_pos[1]
@@ -471,5 +477,5 @@ if __name__ == '__main__':
                 display_end_screen = False
 
             # TODO: record text file, design and set icon (line 214), updating record in game & .txt file,
-            #  end screen show time and record breaking, fixing menu_rect after solved game bug
-            # Code compressions: Display class. fixing end screen and rec update
+            #  end screen show time and record breaking,
+            #  Code compressions: Display class. fixing end screen and record update
