@@ -456,8 +456,10 @@ if __name__ == '__main__':
                 menu_rect = displayText(win, dark, 'Menu', cell_size * 7, cell_size * 11, font_size_default)
                 play = False
                 if cheated:
-                    displayText(win, dark, 'This is the solution. Try again?', cell_size * 0.25, cell_size * 10,
+                    displayText(win, dark, 'This is the solution. Try again?', cell_size * 0.25, cell_size * 9.5,
                                 font_size_small)
+                    displayText(win, dark, ', but you used some help.', cell_size * 4.25, cell_size * 10.5,
+                                font_size_very_small)
                 else:
                     if time.gmtime(dt) < times[difficulty]:
                         print(time.gmtime(dt) < times[difficulty])
@@ -477,9 +479,9 @@ if __name__ == '__main__':
                                 f'{calendar.timegm(times[1])}\n{calendar.timegm(times[2])}\n{calendar.timegm(times[3])}\n{calendar.timegm(times[4])}')
                     displayText(win, dark, 'Congrats, you solved the Sudoku!', cell_size * 0.25, cell_size * 9.5,
                                 font_size_small)
-                    displayText(win, dark, f'Your time: {time.strftime("%H:%M:%S", time.gmtime(dt))}', cell_size * 0.25,
-                                cell_size * 10.5,
-                                font_size_small)
+                displayText(win, dark, f'Your time: {time.strftime("%H:%M:%S", time.gmtime(dt))}', cell_size * 0.25,
+                            cell_size * 10.5,
+                            font_size_small)
 
                 display_end_screen = False
 
