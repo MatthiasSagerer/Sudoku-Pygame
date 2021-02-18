@@ -458,15 +458,14 @@ if __name__ == '__main__':
                 if cheated:
                     displayText(win, dark, 'This is the solution. Try again?', cell_size * 0.25, cell_size * 9.5,
                                 font_size_small)
-                    displayText(win, dark, ', but you used some help.', cell_size * 4.25, cell_size * 10.5,
+                    displayText(win, dark, ', but you used some help.', cell_size * 4.5, cell_size * 10.5,
                                 font_size_very_small)
                 else:
                     if time.gmtime(dt) < times[difficulty]:
-                        print(time.gmtime(dt) < times[difficulty])
-                        print(f'time: {dt}')
+                        displayText(win, dark, 'You\'ve broke the record!', cell_size * 4.5, cell_size * 10.5,
+                                    font_size_very_small)
                         if difficulty == 1:
                             t_easy = time.gmtime(dt)
-                            print(t_easy)
                         if difficulty == 2:
                             t_medium = time.gmtime(dt)
                         if difficulty == 3:
@@ -485,5 +484,4 @@ if __name__ == '__main__':
 
                 display_end_screen = False
 
-            # TODO: design and set icon (line 214), end screen: record breaking,
-            #  Code compressions: Display class.
+            # TODO: design and set icon (line 214), Code compressions: Display class.
