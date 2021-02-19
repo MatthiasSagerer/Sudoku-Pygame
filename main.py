@@ -207,6 +207,8 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     win = pygame.display.set_mode((cell_size * 9, cell_size * 12))
     pygame.display.set_caption('Sudoku')
+    ICON_SURFACE = pygame.image.load('sudoku_icon_2.png').convert_alpha()
+    pygame.display.set_icon(ICON_SURFACE)
     if dark:
         bg_col = 'black'
     else:
