@@ -214,7 +214,6 @@ if __name__ == '__main__':
     else:
         bg_col = 'white'
     win.fill(color=bg_col)
-    # pygame.display.set_icon() TODO: Design and set icon
     while playing:
         difficulty = 0
         records = open('records.txt', 'r')
@@ -346,9 +345,9 @@ if __name__ == '__main__':
                             bg_col = 'black'
                         else:
                             bg_col = 'white'
-                        difficulty = 0
-                        solved = False
                         grid = False
+                        display_end_screen = False
+                        difficulty = 0
                         current_sudoku = copy.deepcopy(blank_sudoku)
                         current_sudoku_start = copy.deepcopy(blank_sudoku)
                         current_solution = copy.deepcopy(blank_sudoku)
@@ -483,7 +482,6 @@ if __name__ == '__main__':
                 displayText(win, dark, f'Your time: {time.strftime("%H:%M:%S", time.gmtime(dt))}', cell_size * 0.25,
                             cell_size * 10.5,
                             font_size_small)
-
                 display_end_screen = False
 
-            # TODO: design and set icon (line 214), Code compressions: Display class.
+            # TODO: Code compressions: Display class & more.
