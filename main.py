@@ -1,6 +1,6 @@
 import pygame
 import random
-import data
+import sudoku_data
 import sys
 import time
 import math
@@ -207,7 +207,8 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     win = pygame.display.set_mode((cell_size * 9, cell_size * 12))
     pygame.display.set_caption('Sudoku')
-    ICON_SURFACE = pygame.image.load('sudoku_icon_2.png').convert_alpha()
+    ICON_SURFACE = pygame.image.load(
+        'C:/Users/Matthias Sagerer/Documents/coding/projects/SudokuPygame/sudoku_icon_2.png').convert_alpha()
     pygame.display.set_icon(ICON_SURFACE)
     if dark:
         bg_col = 'black'
@@ -216,10 +217,9 @@ if __name__ == '__main__':
     win.fill(color=bg_col)
     while playing:
         difficulty = 0
-        records = open('records.txt', 'r')
         global t_easy, t_medium, t_hard, t_very_hard, times
         if first_loop:
-            with open('./records.txt') as file:
+            with open('C:/Users/Matthias Sagerer/Documents/coding/projects/SudokuPygame/records.txt') as file:
                 lines = file.readlines()
                 t_easy = time.gmtime(int(lines[0][:-1]))
                 t_medium = time.gmtime(int(lines[1][:-1]))
@@ -300,8 +300,8 @@ if __name__ == '__main__':
             if first:
                 solved = False
                 grid = True
-                sudokus_list = data.sudokus[difficulty]
-                solutions_list = data.solutions[difficulty]
+                sudokus_list = sudoku_data.sudokus[difficulty]
+                solutions_list = sudoku_data.solutions[difficulty]
                 rand_num = random.randint(0, len(sudokus_list) - 1)
                 current_sudoku_start = sudokus_list[rand_num].copy()
                 current_sudoku = copy.deepcopy(blank_sudoku)
@@ -474,7 +474,8 @@ if __name__ == '__main__':
                         if difficulty == 4:
                             t_very_hard = time.gmtime(dt)
                         times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
-                        with open('records.txt', 'w') as file:
+                        with open('C:/Users/Matthias Sagerer/Documents/coding/projects/SudokuPygame/records.txt',
+                                  'w') as file:
                             file.write(
                                 f'{calendar.timegm(times[1])}\n{calendar.timegm(times[2])}\n{calendar.timegm(times[3])}\n{calendar.timegm(times[4])}')
                     displayText(win, dark, 'Congrats, you solved the Sudoku!', cell_size * 0.25, cell_size * 9.5,
@@ -484,4 +485,4 @@ if __name__ == '__main__':
                             font_size_small)
                 display_end_screen = False
 
-            # TODO: Code compressions: Display class & more.
+            # TODO: Code compressions: Display class & more. Fixing 'failed to execute script main' bug
