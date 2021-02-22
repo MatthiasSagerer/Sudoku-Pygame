@@ -2,6 +2,7 @@ import pygame
 import random
 import sudoku_data
 import sys
+import os
 import time
 import math
 import copy
@@ -18,6 +19,12 @@ blank_sudoku = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
+
+
+def getPath(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
 
 def drawGrid(surface, dark_info):
@@ -207,8 +214,7 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     win = pygame.display.set_mode((cell_size * 9, cell_size * 12))
     pygame.display.set_caption('Sudoku')
-    ICON_SURFACE = pygame.image.load(
-        'C:/Users/Matthias Sagerer/Documents/coding/projects/SudokuPygame/sudoku_icon_2.png').convert_alpha()
+    ICON_SURFACE = pygame.image.load(getPath('sudoku_icon_2.png')).convert_alpha()
     pygame.display.set_icon(ICON_SURFACE)
     if dark:
         bg_col = 'black'
@@ -219,7 +225,7 @@ if __name__ == '__main__':
         difficulty = 0
         global t_easy, t_medium, t_hard, t_very_hard, times
         if first_loop:
-            with open('C:/Users/Matthias Sagerer/Documents/coding/projects/SudokuPygame/records.txt') as file:
+            with open(getPath('records.txt')) as file:
                 lines = file.readlines()
                 t_easy = time.gmtime(int(lines[0][:-1]))
                 t_medium = time.gmtime(int(lines[1][:-1]))
@@ -474,7 +480,7 @@ if __name__ == '__main__':
                         if difficulty == 4:
                             t_very_hard = time.gmtime(dt)
                         times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
-                        with open('C:/Users/Matthias Sagerer/Documents/coding/projects/SudokuPygame/records.txt',
+                        with open(getPath('records.txt'),
                                   'w') as file:
                             file.write(
                                 f'{calendar.timegm(times[1])}\n{calendar.timegm(times[2])}\n{calendar.timegm(times[3])}\n{calendar.timegm(times[4])}')
