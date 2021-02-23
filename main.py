@@ -22,9 +22,12 @@ blank_sudoku = [
 
 
 def getPath(relative_path):
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath("."), relative_path)
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 def drawGrid(surface, dark_info):
@@ -206,16 +209,16 @@ if __name__ == '__main__':
     playing = True
     FPS = 90
     cell_size = 59
-    font_size_very_small = math.floor(cell_size*0.35)
-    font_size_small = math.floor(cell_size*0.50)
-    font_size_default = math.floor(cell_size*(8/12))
-    font_size_big = math.floor(cell_size*0.80)
+    font_size_very_small = math.floor(cell_size * 0.35)
+    font_size_small = math.floor(cell_size * 0.50)
+    font_size_default = math.floor(cell_size * (8 / 12))
+    font_size_big = math.floor(cell_size * 0.80)
     first_loop = True
     clock = pygame.time.Clock()
     win = pygame.display.set_mode((cell_size * 9, cell_size * 12))
     pygame.display.set_caption('Sudoku')
-    # ICON_SURFACE = pygame.image.load(getPath('sudoku_icon_2.png')).convert_alpha()
-    # pygame.display.set_icon(ICON_SURFACE) TODO: Fix error
+    ICON_SURFACE = pygame.image.load(getPath('sudoku_icon_2.png')).convert_alpha()
+    pygame.display.set_icon(ICON_SURFACE)
     if dark:
         bg_col = 'black'
     else:
@@ -228,14 +231,12 @@ if __name__ == '__main__':
             t_easy = t_medium = t_hard = t_very_hard = time.gmtime(86399)
             times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
             first_loop = False
-        '''
-            with open(getPath('records.txt')) as file:
+            with open(getPath('records.txt'), 'r') as file:
                 lines = file.readlines()
                 t_easy = time.gmtime(int(lines[0][:-1]))
                 t_medium = time.gmtime(int(lines[1][:-1]))
                 t_hard = time.gmtime(int(lines[2][:-1]))
                 t_very_hard = time.gmtime(int(lines[3]))
-        '''  # TODO: FIX ERROR
         time_easy = time.strftime('%H:%M:%S', times[1])
         time_medium = time.strftime('%H:%M:%S', times[2])
         time_hard = time.strftime('%H:%M:%S', times[3])
@@ -495,4 +496,4 @@ if __name__ == '__main__':
                             font_size_small)
                 display_end_screen = False
 
-            # TODO: Code compressions: Display class & more. Fixing 'failed to execute script main' bug
+            # TODO: Code compressions: Display class & more.
