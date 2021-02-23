@@ -205,17 +205,17 @@ if __name__ == '__main__':
     dark = False
     playing = True
     FPS = 90
-    cell_size = 55
-    font_size_very_small = 18
-    font_size_small = 27
-    font_size_default = 35
-    font_size_big = 45
+    cell_size = 59
+    font_size_very_small = math.floor(cell_size*0.35)
+    font_size_small = math.floor(cell_size*0.50)
+    font_size_default = math.floor(cell_size*(8/12))
+    font_size_big = math.floor(cell_size*0.80)
     first_loop = True
     clock = pygame.time.Clock()
     win = pygame.display.set_mode((cell_size * 9, cell_size * 12))
     pygame.display.set_caption('Sudoku')
-    ICON_SURFACE = pygame.image.load(getPath('sudoku_icon_2.png')).convert_alpha()
-    pygame.display.set_icon(ICON_SURFACE)
+    # ICON_SURFACE = pygame.image.load(getPath('sudoku_icon_2.png')).convert_alpha()
+    # pygame.display.set_icon(ICON_SURFACE) TODO: Fix error
     if dark:
         bg_col = 'black'
     else:
@@ -225,14 +225,17 @@ if __name__ == '__main__':
         difficulty = 0
         global t_easy, t_medium, t_hard, t_very_hard, times
         if first_loop:
+            t_easy = t_medium = t_hard = t_very_hard = time.gmtime(86399)
+            times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
+            first_loop = False
+        '''
             with open(getPath('records.txt')) as file:
                 lines = file.readlines()
                 t_easy = time.gmtime(int(lines[0][:-1]))
                 t_medium = time.gmtime(int(lines[1][:-1]))
                 t_hard = time.gmtime(int(lines[2][:-1]))
                 t_very_hard = time.gmtime(int(lines[3]))
-            times = {1: t_easy, 2: t_medium, 3: t_hard, 4: t_very_hard}
-            first_loop = False
+        '''  # TODO: FIX ERROR
         time_easy = time.strftime('%H:%M:%S', times[1])
         time_medium = time.strftime('%H:%M:%S', times[2])
         time_hard = time.strftime('%H:%M:%S', times[3])
@@ -483,7 +486,8 @@ if __name__ == '__main__':
                         with open(getPath('records.txt'),
                                   'w') as file:
                             file.write(
-                                f'{calendar.timegm(times[1])}\n{calendar.timegm(times[2])}\n{calendar.timegm(times[3])}\n{calendar.timegm(times[4])}')
+                                f'{calendar.timegm(times[1])}\n{calendar.timegm(times[2])}\n{calendar.timegm(times[3])}'
+                                f'\n{calendar.timegm(times[4])}')
                     displayText(win, dark, 'Congrats, you solved the Sudoku!', cell_size * 0.25, cell_size * 9.5,
                                 font_size_small)
                 displayText(win, dark, f'Your time: {time.strftime("%H:%M:%S", time.gmtime(dt))}', cell_size * 0.25,
