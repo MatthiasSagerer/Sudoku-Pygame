@@ -19,7 +19,7 @@ sudokus = {
         sudokus.VERY_HARD5, sudokus.VERY_HARD6, sudokus.VERY_HARD7, sudokus.VERY_HARD8, sudokus.VERY_HARD9,
         sudokus.VERY_HARD10, sudokus.VERY_HARD11, sudokus.VERY_HARD12, sudokus.VERY_HARD13, sudokus.VERY_HARD14,
         sudokus.VERY_HARD15, sudokus.VERY_HARD16, sudokus.VERY_HARD17, sudokus.VERY_HARD18, sudokus.VERY_HARD19,
-        sudokus.VERY_HARD20, sudokus.VERY_HARD21, sudokus.VERY_HARD22, sudokus.VERY_HARD23]
+        sudokus.VERY_HARD20, sudokus.VERY_HARD21, sudokus.VERY_HARD22, sudokus.VERY_HARD23, sudokus.VERY_HARD24]
 }
 
 solutions = {
@@ -43,5 +43,5 @@ solutions = {
         solutions.VERY_HARD10, solutions.VERY_HARD11, solutions.VERY_HARD12, solutions.VERY_HARD13,
         solutions.VERY_HARD14, solutions.VERY_HARD15, solutions.VERY_HARD16, solutions.VERY_HARD17,
         solutions.VERY_HARD18, solutions.VERY_HARD19, solutions.VERY_HARD20, solutions.VERY_HARD21,
-        solutions.VERY_HARD22, solutions.VERY_HARD23]
+        solutions.VERY_HARD22, solutions.VERY_HARD23, solutions.VERY_HARD24]
 }
