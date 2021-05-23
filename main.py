@@ -496,4 +496,9 @@ if __name__ == '__main__':
                             font_size_small)
                 display_end_screen = False
 
-            # TODO: Code compressions: Display class & more.
+# BUG: anti virus detections shows alarm (after download)
+# BUG: .exe failed to execute after download
+# TODO: cleaner code: Display class & more
+# TODO: deleting a number in a specific cell
+
+            
