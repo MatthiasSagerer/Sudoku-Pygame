@@ -18,9 +18,8 @@ Download size Sudoku.exe: 21.8 MB
 
 ### Screenshots
 
-<img src="sudoku_screenshots/Sudoku_welcome_screen_13_07_21.png" alt="Welcome Screen of Sudoku Application" width="200px">
-![Welcome Screen of Sudoku Application](sudoku_screenshots/Sudoku_welcome_screen_13_07_21.png "Sudoku Welcome Screen")
-![Game Screen of Sudoku Application](sudoku_screenshots/Sudoku_game_screen_13_07_21.png "Sudoku Game Screen")
+<img src="sudoku_screenshots/Sudoku_welcome_screen_13_07_21.png" alt="Welcome Screen of Sudoku Application" width="400px">
+<img src="sudoku_screenshots/Sudoku_game_screen_13_07_21.png" alt="Game Screen of Sudoku Application" width="400px">
 
 I apologize for the fact that the code is very cluttered.
 I will work on the clarity of the code in the future.
