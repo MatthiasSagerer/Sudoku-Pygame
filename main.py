@@ -220,9 +220,9 @@ if __name__ == '__main__':
     ICON_SURFACE = pygame.image.load(getPath('sudoku_icon_2.png')).convert_alpha()
     pygame.display.set_icon(ICON_SURFACE)
     if dark:
-        bg_col = 'black'
+        bg_col =(0,0,0)
     else:
-        bg_col = 'white'
+        bg_col = (255,255,255)
     win.fill(color=bg_col)
     while playing:
         difficulty = 0
@@ -258,9 +258,9 @@ if __name__ == '__main__':
                 if dark_rect.collidepoint(mouse_pos):
                     dark = True
                     if dark:
-                        bg_col = 'black'
+                        bg_col = (0,0,0)
                     else:
-                        bg_col = 'white'
+                        bg_col = (255,255,255)
                     win.fill(color=bg_col)
                     easy_rect, medium_rect, hard_rect, very_hard_rect, dark_rect, bright_rect = drawMenu(win, dark,
                                                                                                          time_easy,
@@ -270,9 +270,9 @@ if __name__ == '__main__':
                 if bright_rect.collidepoint(mouse_pos):
                     dark = False
                     if dark:
-                        bg_col = 'black'
+                        bg_col = (0,0,0)
                     else:
-                        bg_col = 'white'
+                        bg_col = (255,255,255)
                     win.fill(color=bg_col)
                     easy_rect, medium_rect, hard_rect, very_hard_rect, dark_rect, bright_rect = drawMenu(win, dark,
                                                                                                          time_easy,
@@ -325,9 +325,9 @@ if __name__ == '__main__':
                 num1, num2, num3, num4, num5, num6, num7, num8, num9 = displayNumbers(win)
                 displayText(win, dark, 'Time:', cell_size * 4.5, cell_size * 9.8, font_size_default)
                 if dark:
-                    col = 'black'
+                    col = (0,0,0)
                 else:
-                    col = 'white'
+                    col = (255,255,255)
                 pygame.draw.rect(win, col, (
                     math.floor(cell_size * 6.25), math.floor(cell_size * 9.8), math.floor(cell_size * 3), cell_size))
                 displayText(win, dark, time.strftime('%H:%M:%S', time.gmtime(dt)), cell_size * 6.25, cell_size * 9.8,
@@ -352,9 +352,9 @@ if __name__ == '__main__':
                     mouse_pos = event.pos
                     if menu_rect.collidepoint(mouse_pos):
                         if dark:
-                            bg_col = 'black'
+                            bg_col = (0,0,0)
                         else:
-                            bg_col = 'white'
+                            bg_col = (255,255,255)
                         grid = False
                         display_end_screen = False
                         difficulty = 0
@@ -436,9 +436,9 @@ if __name__ == '__main__':
                         markCellsLogic(col * cell_size, row * cell_size, False)
                     if play_pause_rect.collidepoint(mouse_pos):
                         if dark:
-                            col = 'black'
+                            col = (0,0,0)
                         else:
-                            col = 'white'
+                            col = (255,255,255)
                         if play_pause == 'Play':
                             play_pause = 'Pause'
                             play = True
@@ -496,6 +496,7 @@ if __name__ == '__main__':
                             font_size_small)
                 display_end_screen = False
 
+# IMPORTANT CHANGE: seperate file for functions
 # BUG: anti virus detections shows alarm (after download)
 # BUG: .exe failed to execute after download
 # TODO: cleaner code: Display class & more
