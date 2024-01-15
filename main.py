@@ -495,9 +495,3 @@ if __name__ == '__main__':
                             cell_size * 10.5,
                             font_size_small)
                 display_end_screen = False
-
-# IMPORTANT CHANGE: separate file for functions
-# BUG: anti virus detections shows alarm (after download)
-# BUG: .exe failed to execute after download
-# TODO: cleaner code: display class & more functions
-# TODO: deleting a number in a specific cell
