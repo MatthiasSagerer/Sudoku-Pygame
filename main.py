@@ -473,7 +473,7 @@ if __name__ == '__main__':
                                 font_size_very_small)
                 else:
                     if time.gmtime(dt) < times[difficulty]:
-                        displayText(win, dark, 'You\'ve broke the record!', cell_size * 4.5, cell_size * 10.5,
+                        displayText(win, dark, 'You broke the record!', cell_size * 4.5, cell_size * 10.5,
                                     font_size_very_small)
                         if difficulty == 1:
                             t_easy = time.gmtime(dt)
@@ -496,10 +496,8 @@ if __name__ == '__main__':
                             font_size_small)
                 display_end_screen = False
 
-# IMPORTANT CHANGE: seperate file for functions
+# IMPORTANT CHANGE: separate file for functions
 # BUG: anti virus detections shows alarm (after download)
 # BUG: .exe failed to execute after download
-# TODO: cleaner code: Display class & more
+# TODO: cleaner code: display class & more functions
 # TODO: deleting a number in a specific cell
-
-            
